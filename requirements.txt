@@ -7,3 +7,5 @@ python-dotenv
 langchain-community
 python-docx
 pandas
+tiktoken
+numpy
