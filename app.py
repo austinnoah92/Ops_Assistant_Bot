@@ -13,12 +13,12 @@ from utils.vector_store import (
     save_vector_store
 )
 
+# Load environment variables from .env file (for local development)
+load_dotenv()
+
 # Ensure directories exist
 os.makedirs('documents', exist_ok=True)
 os.makedirs('vector_stores', exist_ok=True)
-
-# Load environment variables for local development
-load_dotenv()
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -103,15 +103,18 @@ if selected_file:
     # Initialize Language Model and QA Chain
     @st.cache_resource
     def initialize_llm():
+        api_key = None
         # Attempt to retrieve API key from Streamlit secrets
-        if "OPENAI_API_KEY" in st.secrets:
+        try:
             api_key = st.secrets["OPENAI_API_KEY"]
-        else:
+        except (AttributeError, KeyError, FileNotFoundError):
             # Fallback to environment variable
             api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key:
-                st.error("OPENAI_API_KEY not found. Please set it in your .env file or Streamlit secrets.")
-                st.stop()
+        
+        if not api_key:
+            st.error("OPENAI_API_KEY not found. Please set it in your .env file or Streamlit Cloud secrets.")
+            st.stop()
+        
         return OpenAI(temperature=0, openai_api_key=api_key)
 
     llm = initialize_llm()
