@@ -106,15 +106,14 @@ if selected_file:
         api_key = None
         # Attempt to retrieve API key from Streamlit secrets
         try:
+            # This line will attempt to access st.secrets
             api_key = st.secrets["OPENAI_API_KEY"]
         except (AttributeError, KeyError, FileNotFoundError):
-            # Fallback to environment variable
+            # If secrets.toml is not found or key is missing, fallback to environment variable
             api_key = os.getenv("OPENAI_API_KEY")
-        
-        if not api_key:
-            st.error("OPENAI_API_KEY not found. Please set it in your .env file or Streamlit Cloud secrets.")
-            st.stop()
-        
+            if not api_key:
+                st.error("OPENAI_API_KEY not found. Please set it in your .env file or Streamlit Cloud secrets.")
+                st.stop()
         return OpenAI(temperature=0, openai_api_key=api_key)
 
     llm = initialize_llm()
