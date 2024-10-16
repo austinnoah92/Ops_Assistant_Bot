@@ -7,4 +7,3 @@ python-dotenv
 langchain-community
 python-docx
 pandas
-docx2txt
