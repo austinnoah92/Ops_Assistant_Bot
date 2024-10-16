@@ -103,10 +103,16 @@ if selected_file:
     # Initialize Language Model and QA Chain
     @st.cache_resource
     def initialize_llm():
-        return OpenAI(
-            temperature=0,
-            openai_api_key=st.secrets["OPENAI_API_KEY"]  # Use Streamlit secrets
-        )
+        # Attempt to retrieve API key from Streamlit secrets
+        if "OPENAI_API_KEY" in st.secrets:
+            api_key = st.secrets["OPENAI_API_KEY"]
+        else:
+            # Fallback to environment variable
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                st.error("OPENAI_API_KEY not found. Please set it in your .env file or Streamlit secrets.")
+                st.stop()
+        return OpenAI(temperature=0, openai_api_key=api_key)
 
     llm = initialize_llm()
 
