@@ -107,8 +107,7 @@ if selected_file:
         # Attempt to retrieve API key from Streamlit secrets
         try:
             # This line will attempt to access st.secrets
-            os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-            api_key = os.environ['OPENAI_API_KEY']
+            api_key = st.secrets["OPENAI_API_KEY"]
         except (AttributeError, KeyError, FileNotFoundError):
             # If secrets.toml is not found or key is missing, fallback to environment variable
             api_key = os.getenv("OPENAI_API_KEY")
