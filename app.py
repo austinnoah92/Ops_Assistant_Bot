@@ -17,7 +17,7 @@ from utils.vector_store import (
 os.makedirs('documents', exist_ok=True)
 os.makedirs('vector_stores', exist_ok=True)
 
-# Load environment variables
+# Load environment variables for local development
 load_dotenv()
 
 # Set Streamlit page configuration
@@ -103,7 +103,10 @@ if selected_file:
     # Initialize Language Model and QA Chain
     @st.cache_resource
     def initialize_llm():
-        return OpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"))
+        return OpenAI(
+            temperature=0,
+            openai_api_key=st.secrets["OPENAI_API_KEY"]  # Use Streamlit secrets
+        )
 
     llm = initialize_llm()
 
