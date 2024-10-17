@@ -228,7 +228,7 @@ st.markdown("""
 # Sidebar with instructions and document info
 with st.sidebar:
     st.title("📄 Document Explorer")
-    st.write("Hi there! I am **ZopA** 🤖, an AI assistant designed to help you understand and extract information from various documents. Simply choose a document and ask any questions you have.")
+    st.write("Hi there! I am **ZopA** 🤖 and I can help you understand and extract information from various documents. Simply choose a document and ask any questions you have.")
     st.write("---")
     st.subheader("Available Documents")
     # Get the list of available documents in the 'documents' directory
@@ -330,9 +330,13 @@ if selected_file:
 
     # Function to check content using OpenAI's Moderation API
     def is_content_allowed(text):
-        response = openai.Moderation.create(input=text)
-        result = response["results"][0]
-        return not result["flagged"]
+        try:
+            response = openai.Moderations.create(input=text)
+            result = response["results"][0]
+            return not result["flagged"]
+        except Exception as e:
+            st.error(f"An error occurred during content moderation: {e}")
+            return False
 
     # Function to log interactions
     def log_interaction(user_input, ai_response):
