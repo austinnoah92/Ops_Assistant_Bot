@@ -3,7 +3,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from langchain_community.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.chains import RetrievalQA
 from utils.document_loader import load_pdf
 from utils.text_preprocessor import preprocess_text
